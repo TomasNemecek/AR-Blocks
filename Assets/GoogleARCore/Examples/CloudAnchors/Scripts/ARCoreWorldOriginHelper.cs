@@ -175,18 +175,12 @@ namespace GoogleARCore.Examples.CloudAnchors
             bool detectectedBlock = DetectBlock(rayToCast, out hitInfo);
             if(detectectedBlock)
             {
-                _ShowAndroidToastMessage("Block Detected");
-
                 //position does not have to be transformed, as we are going reflecting from an already anchor-relative position
                 Vector3 buildablePosition = (hitInfo.normal / 2) + hitInfo.transform.position;
                 Quaternion buildableRotation = hitInfo.transform.rotation;
 
                 buildablePose = new Pose(buildablePosition, buildableRotation);
             }
-            else
-            {
-                _ShowAndroidToastMessage("Block Not Detected");     
-            } 
            
             return detectectedBlock; 
         }
@@ -216,26 +210,6 @@ namespace GoogleARCore.Examples.CloudAnchors
                 anchorTWorld.GetColumn(2), anchorTWorld.GetColumn(1));
 
             return new Pose(position, rotation);
-        }
-        
-        
-        private void _ShowAndroidToastMessage(string message)
-        {
-            AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            AndroidJavaObject unityActivity =
-                unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-
-            if (unityActivity != null)
-            {
-                AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
-                unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
-                {
-                    AndroidJavaObject toastObject =
-                        toastClass.CallStatic<AndroidJavaObject>(
-                            "makeText", unityActivity, message, 0);
-                    toastObject.Call("show");
-                }));
-            }
         }
     }
 }
