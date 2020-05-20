@@ -51,6 +51,10 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         public GameObject ReturnButton;
 
+        public GameObject BuildModeButton;
+        
+        public GameObject DestroyModeButton;
+
         /// <summary>
         /// The Cloud Anchors Example Controller.
         /// </summary>
@@ -149,6 +153,18 @@ namespace GoogleARCore.Examples.CloudAnchors
 
             m_Manager.matchMaker.DropConnection(m_Manager.matchInfo.networkId,
                 m_Manager.matchInfo.nodeId, m_Manager.matchInfo.domain, _OnMatchDropped);
+        }
+
+        public void EnableDestroyButton()
+        {
+            DestroyModeButton.SetActive(true);
+            BuildModeButton.SetActive(false);
+        }
+        
+        public void EnableBuildButton()
+        {
+            DestroyModeButton.SetActive(false);
+            BuildModeButton.SetActive(true);
         }
 
         /// <summary>
@@ -321,6 +337,8 @@ namespace GoogleARCore.Examples.CloudAnchors
             SnackbarText.text = "Connecting to server...";
             _ChangeLobbyUIVisibility(false);
             CurrentRoomLabel.GetComponentInChildren<Text>().text = "Room: " + m_CurrentRoomNumber;
+            
+            EnableDestroyButton();
         }
 
         /// <summary>
@@ -345,6 +363,8 @@ namespace GoogleARCore.Examples.CloudAnchors
             SnackbarText.text = "Connecting to server...";
             _ChangeLobbyUIVisibility(false);
             CurrentRoomLabel.GetComponentInChildren<Text>().text = "Room: " + m_CurrentRoomNumber;
+            
+            EnableDestroyButton();
         }
 
         /// <summary>
@@ -364,9 +384,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
             m_Manager.OnDropConnection(success, extendedInfo);
-#pragma warning disable 618
             NetworkManager.Shutdown();
-#pragma warning restore 618
             SceneManager.LoadScene("CloudAnchors");
         }
 

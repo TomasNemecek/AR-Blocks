@@ -99,6 +99,14 @@ namespace GoogleARCore.Examples.CloudAnchors
             // Spawn the object in all clients.
             NetworkServer.Spawn(blockObject);
 
+        }  
+        
+        [Command]
+        public void CmdDestroyBlock(GameObject block)
+        {
+            Destroy(block);
+            NetworkServer.Destroy(block);
+
         }
     }
 }

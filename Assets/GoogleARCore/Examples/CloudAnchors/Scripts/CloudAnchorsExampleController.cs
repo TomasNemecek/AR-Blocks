@@ -122,6 +122,9 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         private Component m_WorldOriginAnchor = null;
 
+
+        private bool m_InDestroyMode = false;
+
         /// <summary>
         /// The last pose of the hit point from AR hit test.
         /// </summary>
@@ -140,9 +143,9 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <summary>
         /// The Network Manager.
         /// </summary>
-#pragma warning disable 618
         private CloudAnchorsNetworkManager m_NetworkManager;
-#pragma warning restore 618
+
+        
 
         /// <summary>
         /// Enumerates modes the example application can be in.
@@ -294,9 +297,23 @@ namespace GoogleARCore.Examples.CloudAnchors
             m_LastHitPose = null;
 
             
+            Ray raycast = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            
+            // We are in destroy mode 
+            if (m_InDestroyMode)
+            {
+
+                RaycastHit hitInfo;
+                if (ARCoreWorldOriginHelper.DetectBlock(raycast, out hitInfo))
+                {
+                    _DestroyBlock(hitInfo.collider.gameObject);
+                }
+                   
+
+                return;
+            }
             //Detect block
             Pose buildablePose;
-            Ray raycast = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             if (IsOriginPlaced && ARCoreWorldOriginHelper.RaycastWithDetection(raycast, out buildablePose ))
             {
                 m_LastHitPose = buildablePose;
@@ -334,6 +351,18 @@ namespace GoogleARCore.Examples.CloudAnchors
                 }
             }
         }
+        
+        public void OnBuildModePressed()
+        {
+            m_InDestroyMode = false;
+            NetworkUIController.EnableDestroyButton();
+        }
+        
+        public void OnDestroyPressed()
+        {
+            m_InDestroyMode = true;
+            NetworkUIController.EnableBuildButton();
+        }
 
         /// <summary>
         /// Indicates whether the resolving prepare time has passed so the AnchorController
@@ -343,8 +372,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </returns>
         public bool IsResolvingPrepareTimePassed()
         {
-            return m_CurrentMode != ApplicationMode.Ready &&
-                m_TimeSinceStart > k_ResolvingPrepareTime;
+            return m_CurrentMode != ApplicationMode.Ready && m_TimeSinceStart > k_ResolvingPrepareTime;
         }
 
         /// <summary>
@@ -362,8 +390,6 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
             IsOriginPlaced = true;
-
-            
             ARCoreWorldOriginHelper.SetWorldOrigin(anchorTransform);
            
         }
@@ -529,11 +555,19 @@ namespace GoogleARCore.Examples.CloudAnchors
                 .CmdSpawnStar(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
         }
         
+        
         private void _InstantiateBlock()
         {
             // Star must be spawned in the server so a networking Command is used.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
                 .CmdSpawnBlock(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
+        }
+        
+        private void _DestroyBlock(GameObject block)
+        {
+            // Star must be spawned in the server so a networking Command is used.
+            GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
+                .CmdDestroyBlock(block);
         }
 
         /// <summary>
