@@ -95,18 +95,57 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             // Instantiate Star model at the hit pose.
             var blockObject = Instantiate(BlockPrefab, position, rotation);
-
             // Spawn the object in all clients.
             NetworkServer.Spawn(blockObject);
 
-        }  
+        }
+
+        public void OnDestroyBlockForClient(GameObject gameobject)
+        {
+            RpcDestroy(gameobject.transform.position);
+        } 
+        
+        [ClientRpc]
+        void RpcDestroy(Vector3 position)
+        {
+            GameObject blockAtVector = FindAt(position);    
+            Destroy(blockAtVector);
+        }
+        
+        GameObject FindAt(Vector3 position) {
+            // get all colliders that intersect pos:
+            Collider[] cols = Physics.OverlapSphere(position, 0.1f);
+            // find the nearest one:
+            float dist = Mathf.Infinity;
+            GameObject nearest = null;
+            int i = 0;
+            while (i < cols.Length)
+            {
+                // find the distance to pos:
+                var d = Vector3.Distance(position, cols[i].transform.position);
+                if (d < dist){ // if closer...
+                    dist = d; // save its distance... 
+                    nearest = cols[i].gameObject; // and its gameObject
+                }
+
+                i++;
+            }
+               
+            return nearest;
+        }
+        
+        public void OnDestroyBlockForHost(GameObject gameobject)
+        {
+            CmdDestroyBlock(gameobject.transform.position);
+            Destroy(gameobject);
+        } 
+        
         
         [Command]
-        public void CmdDestroyBlock(GameObject block)
+        public void CmdDestroyBlock(Vector3 position)
         {
-            Destroy(block);
-            NetworkServer.Destroy(block);
-
-        }
+            GameObject blockAtVector = FindAt(position);          
+            Destroy(blockAtVector);
+        }       
     }
 }

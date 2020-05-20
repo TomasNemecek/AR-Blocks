@@ -308,7 +308,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                 {
                     _DestroyBlock(hitInfo.collider.gameObject);
                 }
-                   
+
 
                 return;
             }
@@ -566,8 +566,19 @@ namespace GoogleARCore.Examples.CloudAnchors
         private void _DestroyBlock(GameObject block)
         {
             // Star must be spawned in the server so a networking Command is used.
-            GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .CmdDestroyBlock(block);
+//            GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
+//                .CmdDestroyBlock(block);
+
+            if (m_CurrentMode == ApplicationMode.Hosting)
+            {
+                GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
+                    .OnDestroyBlockForClient(block);   
+            }
+            else
+            {
+                GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
+                    .OnDestroyBlockForHost(block);       
+            }
         }
 
         /// <summary>
