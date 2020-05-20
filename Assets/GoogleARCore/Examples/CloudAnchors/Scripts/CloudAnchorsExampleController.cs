@@ -294,9 +294,19 @@ namespace GoogleARCore.Examples.CloudAnchors
             m_LastHitPose = null;
 
             
-            if (ARCoreWorldOriginHelper.Raycast(touch.position.x, touch.position.y,
+            //Detect block
+            Pose buildablePose;
+            Ray raycast = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            if (IsOriginPlaced && ARCoreWorldOriginHelper.RaycastWithDetection(raycast, out buildablePose ))
+            {
+                m_LastHitPose = buildablePose;
+            }
+            
+            //Detect plane          
+            else if (ARCoreWorldOriginHelper.Raycast(touch.position.x, touch.position.y,
                     TrackableHitFlags.PlaneWithinPolygon, out arcoreHitResult))
             {
+                
                 m_LastHitPose = arcoreHitResult.Pose;
             }
            

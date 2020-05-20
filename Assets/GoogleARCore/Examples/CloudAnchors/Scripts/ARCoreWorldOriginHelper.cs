@@ -63,6 +63,9 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// The Transform of the Anchor object representing the World Origin.
         /// </summary>
         private Transform m_AnchorTransform;
+        
+        [SerializeField]
+        private LayerMask _blockLayer;
 
         /// <summary>
         /// The Unity Update() method.
@@ -151,13 +154,46 @@ namespace GoogleARCore.Examples.CloudAnchors
             bool foundHit = Frame.Raycast(x, y, filter, out hitResult);
             if (foundHit)
             {
-                Pose worldPose = _WorldToAnchorPose(hitResult.Pose);
+
+                Pose worldPose = _WorldToAnchorPose(hitResult.Pose);       
                 TrackableHit newHit = new TrackableHit(
                     worldPose, hitResult.Distance, hitResult.Flags, hitResult.Trackable);
                 hitResult = newHit;
             }
 
             return foundHit;
+        }
+        
+        public bool RaycastWithDetection(Ray rayToCast, out Pose buildablePose)
+        {
+            
+            RaycastHit hitInfo;
+
+            buildablePose = new Pose();
+            Debug.DrawRay(rayToCast.origin, rayToCast.direction * 100, Color.yellow, 100f);
+
+            bool detectectedBlock = DetectBlock(rayToCast, out hitInfo);
+            if(detectectedBlock)
+            {
+                _ShowAndroidToastMessage("Block Detected");
+
+                //position does not have to be transformed, as we are going reflecting from an already anchor-relative position
+                Vector3 buildablePosition = (hitInfo.normal / 2) + hitInfo.transform.position;
+                Quaternion buildableRotation = hitInfo.transform.rotation;
+
+                buildablePose = new Pose(buildablePosition, buildableRotation);
+            }
+            else
+            {
+                _ShowAndroidToastMessage("Block Not Detected");     
+            } 
+           
+            return detectectedBlock; 
+        }
+        
+        public bool DetectBlock(Ray rayToCast, out RaycastHit hitInfo)
+        {
+            return Physics.Raycast(rayToCast, out hitInfo, 200f, _blockLayer);     
         }
 
         /// <summary>
@@ -180,6 +216,26 @@ namespace GoogleARCore.Examples.CloudAnchors
                 anchorTWorld.GetColumn(2), anchorTWorld.GetColumn(1));
 
             return new Pose(position, rotation);
+        }
+        
+        
+        private void _ShowAndroidToastMessage(string message)
+        {
+            AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject unityActivity =
+                unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+            if (unityActivity != null)
+            {
+                AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
+                unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+                {
+                    AndroidJavaObject toastObject =
+                        toastClass.CallStatic<AndroidJavaObject>(
+                            "makeText", unityActivity, message, 0);
+                    toastObject.Call("show");
+                }));
+            }
         }
     }
 }
