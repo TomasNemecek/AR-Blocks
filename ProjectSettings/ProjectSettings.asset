@@ -762,9 +762,9 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: 16922394-ae81-4046-afee-1f6fd510fdb7
+  cloudProjectId: bb797b09-70b5-4d5e-859e-04314d15f34e
   framebufferDepthMemorylessMode: 0
-  projectName: HelloAR U3D
+  projectName: CloudAnchors
   organizationId: tomnem
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0

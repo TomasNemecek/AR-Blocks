@@ -354,13 +354,13 @@ namespace GoogleARCore.Examples.CloudAnchors
         
         public void OnBuildModePressed()
         {
-            m_InDestroyMode = false;
+            m_InDestroyMode = true;
             NetworkUIController.EnableDestroyButton();
         }
         
         public void OnDestroyPressed()
         {
-            m_InDestroyMode = true;
+            m_InDestroyMode = false;
             NetworkUIController.EnableBuildButton();
         }
 

@@ -338,7 +338,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             _ChangeLobbyUIVisibility(false);
             CurrentRoomLabel.GetComponentInChildren<Text>().text = "Room: " + m_CurrentRoomNumber;
             
-            EnableDestroyButton();
+            EnableBuildButton();
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             _ChangeLobbyUIVisibility(false);
             CurrentRoomLabel.GetComponentInChildren<Text>().text = "Room: " + m_CurrentRoomNumber;
             
-            EnableDestroyButton();
+            EnableBuildButton();
         }
 
         /// <summary>
