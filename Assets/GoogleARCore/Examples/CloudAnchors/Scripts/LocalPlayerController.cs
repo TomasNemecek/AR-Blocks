@@ -42,6 +42,8 @@ namespace GoogleARCore.Examples.CloudAnchors
         
         public GameObject BlockPrefab;
 
+        public GameObject BlocksPrefab;
+
         /// <summary>
         /// The Unity OnStartLocalPlayer() method.
         /// </summary>
@@ -99,6 +101,16 @@ namespace GoogleARCore.Examples.CloudAnchors
             NetworkServer.Spawn(blockObject);
 
         }
+        
+        [Command]
+        public void CmdSpawnBlocks(Vector3 position, Quaternion rotation)
+        {
+            // Instantiate Star model at the hit pose.
+            var blocksObject = Instantiate(BlocksPrefab, position, rotation);
+            // Spawn the object in all clients.
+            NetworkServer.Spawn(blocksObject);
+
+        }
 
         public void OnDestroyBlockForClient(GameObject gameobject)
         {
@@ -144,7 +156,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         [Command]
         public void CmdDestroyBlock(Vector3 position)
         {
-            GameObject blockAtVector = FindAt(position);          
+            GameObject blockAtVector = FindAt(position);
             Destroy(blockAtVector);
         }       
     }

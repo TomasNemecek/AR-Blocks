@@ -323,8 +323,13 @@ namespace GoogleARCore.Examples.CloudAnchors
             else if (ARCoreWorldOriginHelper.Raycast(touch.position.x, touch.position.y,
                     TrackableHitFlags.PlaneWithinPolygon, out arcoreHitResult))
             {
-                
+                //If origin is already placed, change the y value so that gameobject is not clipping through the plane
+                //TODO change y by scale when we have different objects. 
                 m_LastHitPose = arcoreHitResult.Pose;
+                if (IsOriginPlaced)
+                {
+                    m_LastHitPose = new Pose(new Vector3(m_LastHitPose.Value.position.x, m_LastHitPose.Value.position.y + 0.25f, m_LastHitPose.Value.position.z), m_LastHitPose.Value.rotation);    
+                }
             }
            
 
@@ -335,8 +340,8 @@ namespace GoogleARCore.Examples.CloudAnchors
                 // subsequent touch will instantiate a star, both in Hosting and Resolving modes.
                 if (_CanPlaceStars())
                 {
-//                    _InstantiateStar();
                     _InstantiateBlock();
+//                    _InstantiateBlocks();
                 }
                 else if (!IsOriginPlaced && m_CurrentMode == ApplicationMode.Hosting)
                 {
@@ -544,23 +549,19 @@ namespace GoogleARCore.Examples.CloudAnchors
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
                 .SpawnAnchor(Vector3.zero, Quaternion.identity, m_WorldOriginAnchor);
         }
-
-        /// <summary>
-        /// Instantiates a star object that will be synchronized over the network to other clients.
-        /// </summary>
-        private void _InstantiateStar()
-        {
-            // Star must be spawned in the server so a networking Command is used.
-            GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .CmdSpawnStar(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
-        }
-        
-        
+       
         private void _InstantiateBlock()
         {
             // Star must be spawned in the server so a networking Command is used.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
                 .CmdSpawnBlock(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
+        }
+        
+        private void _InstantiateBlocks()
+        {
+            // Star must be spawned in the server so a networking Command is used.
+            GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
+                .CmdSpawnBlocks(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
         }
         
         private void _DestroyBlock(GameObject block)
