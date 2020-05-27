@@ -43,6 +43,8 @@ namespace GoogleARCore.Examples.CloudAnchors
         public GameObject BlockPrefab;
 
         public GameObject BlocksPrefab;
+        public GameObject BlocksVertPrefab;
+        public GameObject BlocksCorner;
 
         /// <summary>
         /// The Unity OnStartLocalPlayer() method.
@@ -91,24 +93,36 @@ namespace GoogleARCore.Examples.CloudAnchors
             NetworkServer.Spawn(starObject);
 
         }
-        
-        [Command]
-        public void CmdSpawnBlock(Vector3 position, Quaternion rotation)
-        {
-            // Instantiate Star model at the hit pose.
-            var blockObject = Instantiate(BlockPrefab, position, rotation);
-            // Spawn the object in all clients.
-            NetworkServer.Spawn(blockObject);
 
+        public void SpawnObject(SelectedObject selectedObject, Vector3 position, Quaternion rotation)
+        {
+            GameObject prefabToSpawn;
+            switch (selectedObject)
+            {
+                case SelectedObject.Blocks:
+                    prefabToSpawn = BlocksPrefab;
+                    break;
+                case SelectedObject.BlocksVertical:
+                    prefabToSpawn = BlocksVertPrefab;
+                    break;
+                case SelectedObject.BlocksCorner:
+                    prefabToSpawn = BlocksCorner;
+                    break;
+                default:
+                    prefabToSpawn = BlockPrefab;
+                    break;
+            }
+            
+            CmdSpawnObject(prefabToSpawn, position, rotation);           
         }
         
         [Command]
-        public void CmdSpawnBlocks(Vector3 position, Quaternion rotation)
+        public void CmdSpawnObject(GameObject obj, Vector3 position, Quaternion rotation)
         {
             // Instantiate Star model at the hit pose.
-            var blocksObject = Instantiate(BlocksPrefab, position, rotation);
+            var blockObject = Instantiate(obj, position, rotation);
             // Spawn the object in all clients.
-            NetworkServer.Spawn(blocksObject);
+            NetworkServer.Spawn(blockObject);
 
         }
 

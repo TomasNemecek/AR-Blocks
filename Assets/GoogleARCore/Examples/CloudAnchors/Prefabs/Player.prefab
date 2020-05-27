@@ -82,3 +82,9 @@ MonoBehaviour:
     type: 3}
   BlockPrefab: {fileID: 8786034677356863673, guid: 8c463e7b3a3a9bc4a851981db8920961,
     type: 3}
+  BlocksPrefab: {fileID: 4950115067759889871, guid: 4284c978c07a48943b07d1a6228dd99e,
+    type: 3}
+  BlocksVertPrefab: {fileID: 4048565573910236214, guid: 9f2d97280e27b2b42a86216b332fdd01,
+    type: 3}
+  BlocksCorner: {fileID: 1619573858750406774, guid: 098ade5a591b00e4cba0b9c6c02e43af,
+    type: 3}

@@ -54,6 +54,11 @@ namespace GoogleARCore.Examples.CloudAnchors
         public GameObject BuildModeButton;
         
         public GameObject DestroyModeButton;
+        
+        public Button BlockButton;
+        public Button BlocksButton;
+        public Button BlockVertButton;
+        public Button CornerButton;
 
         /// <summary>
         /// The Cloud Anchors Example Controller.
@@ -155,6 +160,25 @@ namespace GoogleARCore.Examples.CloudAnchors
                 m_Manager.matchInfo.nodeId, m_Manager.matchInfo.domain, _OnMatchDropped);
         }
 
+        public void OnSelectorClicked(GameObject btn)
+        {
+            _ResetButtons();            
+        }
+
+        private void _ResetButtons()
+        {
+            resetBtn(BlockButton);     
+            resetBtn(BlocksButton);     
+            resetBtn(BlockVertButton);     
+            resetBtn(CornerButton);     
+        }
+
+        private void resetBtn(Button btn)
+        {
+            btn.GetComponent<Text>().color = Color.black;; 
+            btn.GetComponent<Image>().color = Color.white;; 
+        }
+        
         public void EnableDestroyButton()
         {
             DestroyModeButton.SetActive(true);

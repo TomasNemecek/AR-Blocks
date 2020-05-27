@@ -18,6 +18,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using UnityEngine.UI;
+
 namespace GoogleARCore.Examples.CloudAnchors
 {
     using GoogleARCore;
@@ -77,7 +79,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <summary>
         /// The Status Screen to display the connection status and cloud anchor instructions.
         /// </summary>
-        public GameObject StatusScreen;
+        public GameObject StatusScreen;     
 
         /// <summary>
         /// The key name used in PlayerPrefs which indicates whether
@@ -122,7 +124,6 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         private Component m_WorldOriginAnchor = null;
 
-
         private bool m_InDestroyMode = false;
 
         /// <summary>
@@ -145,7 +146,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         private CloudAnchorsNetworkManager m_NetworkManager;
 
-        
+        private SelectedObject m_SelectedObject;   
 
         /// <summary>
         /// Enumerates modes the example application can be in.
@@ -188,6 +189,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             /// </summary>
             ARScreen,
         }
+        
 
         /// <summary>
         /// Gets a value indicating whether the Origin of the new World Coordinate System,
@@ -315,8 +317,9 @@ namespace GoogleARCore.Examples.CloudAnchors
             //Detect block
             Pose buildablePose;
             if (IsOriginPlaced && ARCoreWorldOriginHelper.RaycastWithDetection(raycast, out buildablePose ))
-            {
+            {  
                 m_LastHitPose = buildablePose;
+
             }
             
             //Detect plane          
@@ -324,7 +327,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                     TrackableHitFlags.PlaneWithinPolygon, out arcoreHitResult))
             {
                 //If origin is already placed, change the y value so that gameobject is not clipping through the plane
-                //TODO change y by scale when we have different objects. 
+                //TODO change y by scale when we have different objects and scaling. 
                 m_LastHitPose = arcoreHitResult.Pose;
                 if (IsOriginPlaced)
                 {
@@ -340,8 +343,8 @@ namespace GoogleARCore.Examples.CloudAnchors
                 // subsequent touch will instantiate a star, both in Hosting and Resolving modes.
                 if (_CanPlaceStars())
                 {
-                    _InstantiateBlock();
-//                    _InstantiateBlocks();
+//                    _InstantiateBlock();
+                    _InstantiateObject();
                 }
                 else if (!IsOriginPlaced && m_CurrentMode == ApplicationMode.Hosting)
                 {
@@ -550,18 +553,11 @@ namespace GoogleARCore.Examples.CloudAnchors
                 .SpawnAnchor(Vector3.zero, Quaternion.identity, m_WorldOriginAnchor);
         }
        
-        private void _InstantiateBlock()
+        private void _InstantiateObject()
         {
             // Star must be spawned in the server so a networking Command is used.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .CmdSpawnBlock(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
-        }
-        
-        private void _InstantiateBlocks()
-        {
-            // Star must be spawned in the server so a networking Command is used.
-            GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .CmdSpawnBlocks(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
+                .SpawnObject(m_SelectedObject, m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
         }
         
         private void _DestroyBlock(GameObject block)
@@ -734,6 +730,59 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             NetworkManager.Shutdown();
             SceneManager.LoadScene("CloudAnchors");
+        }
+
+        public void OnCubeClicked()
+        {
+            m_SelectedObject = SelectedObject.Block;
+            _ActiveteButton();
+        }
+
+        public void OnCubesClicked()
+        {
+            m_SelectedObject = SelectedObject.Blocks;    
+            _ActiveteButton();
+        }
+
+        public void OnCubesVerticalClicked()
+        {
+            m_SelectedObject = SelectedObject.BlocksVertical;   
+            _ActiveteButton();
+        }
+        
+        public void OnCubesCornerClicked()
+        {
+            m_SelectedObject = SelectedObject.BlocksCorner;    
+            _ActiveteButton();
+        }
+
+        private void _ActiveteButton()
+        {
+            GameObject btn = EventSystem.current.currentSelectedGameObject;
+            _ShowAndroidToastMessage(btn.name);
+            NetworkUIController.OnSelectorClicked(btn);
+            btn.GetComponent<Image>().color = new Color(15, 77, 188);          
+            btn.GetComponent<Text>().color = Color.white;
+        }
+        
+        
+        private void _ShowAndroidToastMessage(string message)
+        {
+            AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject unityActivity =
+                unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+            if (unityActivity != null)
+            {
+                AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
+                unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+                {
+                    AndroidJavaObject toastObject =
+                        toastClass.CallStatic<AndroidJavaObject>(
+                            "makeText", unityActivity, message, 0);
+                    toastObject.Call("show");
+                }));
+            }
         }
     }
 }
