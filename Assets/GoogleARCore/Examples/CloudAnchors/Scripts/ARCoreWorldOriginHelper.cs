@@ -178,6 +178,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                 //position does not have to be transformed, as we are going reflecting from an already anchor-relative position
                 Vector3 buildablePosition = (hitInfo.normal / 2) + hitInfo.transform.position;
                 
+                //TODO fix rotation
                 //Make rotation along be along the normal
                 //Have to use Euler angles to express Quaternion as a Vector
                 Vector3 rot = hitInfo.transform.rotation.eulerAngles; // hit object rotation
