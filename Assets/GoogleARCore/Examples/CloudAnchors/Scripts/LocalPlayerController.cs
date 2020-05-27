@@ -94,7 +94,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         }
 
-        public void SpawnObject(SelectedObject selectedObject, Vector3 position, Quaternion rotation)
+        public void SpawnObject(SelectedObject selectedObject, SelectedSize selectedSize, Vector3 position, Quaternion rotation)
         {
             GameObject prefabToSpawn;
             switch (selectedObject)
@@ -112,6 +112,31 @@ namespace GoogleARCore.Examples.CloudAnchors
                     prefabToSpawn = BlockPrefab;
                     break;
             }
+
+            float scale;
+            switch (selectedSize)
+            {
+                case SelectedSize.Mini:
+                    scale = 0.25f;
+                    break;
+                case SelectedSize.Small:
+                    scale = 0.5f;
+                    break;
+                case SelectedSize.Large:
+                    scale = 1.5f;
+                    break;
+                default:
+                    scale = 1f;
+                    break;
+            }
+
+            Vector3 tempScale = prefabToSpawn.transform.localScale;
+
+            tempScale.x = scale;
+            tempScale.y = scale;
+            tempScale.z = scale;
+
+            prefabToSpawn.transform.localScale = tempScale;
             
             CmdSpawnObject(prefabToSpawn, position, rotation);           
         }

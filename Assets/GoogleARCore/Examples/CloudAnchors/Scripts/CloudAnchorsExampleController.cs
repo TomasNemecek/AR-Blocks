@@ -146,8 +146,10 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         private CloudAnchorsNetworkManager m_NetworkManager;
 
-        private SelectedObject m_SelectedObject;   
+        private SelectedObject m_SelectedObject;
 
+        private SelectedSize m_SelectedSize;
+        
         /// <summary>
         /// Enumerates modes the example application can be in.
         /// </summary>
@@ -316,7 +318,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
             //Detect block
             Pose buildablePose;
-            if (IsOriginPlaced && ARCoreWorldOriginHelper.RaycastWithDetection(raycast, out buildablePose ))
+            if (IsOriginPlaced && ARCoreWorldOriginHelper.RaycastWithDetection(raycast, m_SelectedSize, out buildablePose ))
             {  
                 m_LastHitPose = buildablePose;
 
@@ -331,7 +333,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                 m_LastHitPose = arcoreHitResult.Pose;
                 if (IsOriginPlaced)
                 {
-                    m_LastHitPose = new Pose(new Vector3(m_LastHitPose.Value.position.x, m_LastHitPose.Value.position.y + 0.25f, m_LastHitPose.Value.position.z), m_LastHitPose.Value.rotation);    
+                    m_LastHitPose = new Pose(new Vector3(m_LastHitPose.Value.position.x, m_LastHitPose.Value.position.y + CalcAdjustedHeight(), m_LastHitPose.Value.position.z), m_LastHitPose.Value.rotation);    
                 }
             }
            
@@ -557,7 +559,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             // Star must be spawned in the server so a networking Command is used.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .SpawnObject(m_SelectedObject, m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
+                .SpawnObject(m_SelectedObject, m_SelectedSize, m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
         }
         
         private void _DestroyBlock(GameObject block)
@@ -735,6 +737,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void OnCubeClicked()
         {
             m_SelectedObject = SelectedObject.Block;
+            NetworkUIController.OnSelectorClicked();
             _ActiveteButton();
         }
 
@@ -742,26 +745,55 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             m_SelectedObject = SelectedObject.Blocks;    
             _ActiveteButton();
+            NetworkUIController.OnSelectorClicked();
         }
 
         public void OnCubesVerticalClicked()
         {
             m_SelectedObject = SelectedObject.BlocksVertical;   
             _ActiveteButton();
+            NetworkUIController.OnSelectorClicked();
+            
         }
         
         public void OnCubesCornerClicked()
         {
-            m_SelectedObject = SelectedObject.BlocksCorner;    
+            m_SelectedObject = SelectedObject.BlocksCorner;  
+            _ActiveteButton();
+            NetworkUIController.OnSelectorClicked();
+        }
+        
+        public void OnMiniClicked()
+        {
+            m_SelectedSize = SelectedSize.Mini;
             _ActiveteButton();
         }
+        
+        public void OnSmallClicked()
+        {
+            m_SelectedSize = SelectedSize.Small;
+            _ActiveteButton();
+        }
+        
+        public void OnMediumClicked()
+        {
+            m_SelectedSize = SelectedSize.Medium;
+            _ActiveteButton();
+        }
+        
+        public void OnLargeClicked()
+        {
+            m_SelectedSize = SelectedSize.Large;
+            _ActiveteButton();
+        }
+
+        
 
         private void _ActiveteButton()
         {
             GameObject btn = EventSystem.current.currentSelectedGameObject;
             _ShowAndroidToastMessage(btn.name);
-            NetworkUIController.OnSelectorClicked(btn);
-            btn.GetComponent<Image>().color = new Color(15, 77, 188);          
+            btn.GetComponent<Image>().color = Color.black;          
             btn.GetComponent<Text>().color = Color.white;
         }
         
@@ -782,6 +814,21 @@ namespace GoogleARCore.Examples.CloudAnchors
                             "makeText", unityActivity, message, 0);
                     toastObject.Call("show");
                 }));
+            }
+        }
+
+        private float CalcAdjustedHeight()
+        {
+            switch (m_SelectedSize)
+            {
+                case SelectedSize.Mini:
+                    return 0.25f / 4; 
+                case SelectedSize.Small:
+                    return 0.25f/2;
+                case SelectedSize.Large:
+                    return 0.5f;
+                default:
+                    return 0.25f;
             }
         }
     }

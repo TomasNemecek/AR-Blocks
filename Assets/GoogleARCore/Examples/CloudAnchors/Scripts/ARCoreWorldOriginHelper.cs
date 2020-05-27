@@ -164,7 +164,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             return foundHit;
         }
         
-        public bool RaycastWithDetection(Ray rayToCast, out Pose buildablePose)
+        public bool RaycastWithDetection(Ray rayToCast, SelectedSize selectedSize, out Pose buildablePose)
         {
             
             RaycastHit hitInfo;
@@ -176,16 +176,15 @@ namespace GoogleARCore.Examples.CloudAnchors
             if(detectectedBlock)
             {
                 //position does not have to be transformed, as we are going reflecting from an already anchor-relative position
-                Vector3 buildablePosition = (hitInfo.normal / 2) + hitInfo.transform.position;
+                Vector3 buildablePosition = CalcAdjustedNormalPosition(hitInfo) + hitInfo.transform.position;
                 
                 //TODO fix rotation
                 //Make rotation along be along the normal
                 //Have to use Euler angles to express Quaternion as a Vector
                 Vector3 rot = hitInfo.transform.rotation.eulerAngles; // hit object rotation
                 Vector3 adjustedRotation = new Vector3(0, rot.y, 0);
-                Quaternion buildableRotation = Quaternion.Euler(adjustedRotation);
-//                
-             
+                Quaternion buildableRotation = Quaternion.Euler(adjustedRotation);                
+                
 //                Quaternion buildableRotation = transform.LookAt(hitInfo.transform.position + hitInfo.transform.forward,
 //                    hitInfo.normal);
                 
@@ -220,6 +219,72 @@ namespace GoogleARCore.Examples.CloudAnchors
                 anchorTWorld.GetColumn(2), anchorTWorld.GetColumn(1));
 
             return new Pose(position, rotation);
+        }
+        
+        
+//        private Vector3 CalcAdjustedNormalPosition(SelectedSize size, Vector3 normal)
+//        {
+//            switch (size)
+//            {
+//                case SelectedSize.Mini:
+//                    return normal / 8; 
+//                case SelectedSize.Small:
+//                    return normal / 4;
+//                case SelectedSize.Large:
+//                    return normal;
+//                default:
+//                    return normal / 2;
+//            }
+//        }
+        
+        private Vector3 CalcAdjustedNormalPosition(RaycastHit hitInfo)
+        {
+            Vector3 hitObjectScale = hitInfo.collider.gameObject.transform.lossyScale;
+
+            _ShowAndroidToastMessage("Obj scale: " + hitObjectScale.x);
+            _ShowAndroidToastMessage("Normal: " + hitInfo.normal);
+            
+            if (hitObjectScale.x > 0 && hitObjectScale.x < 0.25f)
+            {
+                //Mini
+                            
+                _ShowAndroidToastMessage("mini");
+                return hitInfo.normal / 8;
+                
+            } else if (hitObjectScale.x >= 0.25f && hitObjectScale.x < 0.48f)
+            {    // Small
+                _ShowAndroidToastMessage("Small");
+                return hitInfo.normal / 4;
+                
+            } else if (hitObjectScale.x >= 0.5f && hitObjectScale.x < 0.74f)
+            {    //Medium
+                _ShowAndroidToastMessage("Medium");
+                return hitInfo.normal / 2;    
+            } else
+            {
+                //Large
+                _ShowAndroidToastMessage("Large");
+                return hitInfo.normal;
+            }
+        }
+        
+        private void _ShowAndroidToastMessage(string message)
+        {
+            AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject unityActivity =
+                unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+            if (unityActivity != null)
+            {
+                AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
+                unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+                {
+                    AndroidJavaObject toastObject =
+                        toastClass.CallStatic<AndroidJavaObject>(
+                            "makeText", unityActivity, message, 0);
+                    toastObject.Call("show");
+                }));
+            }
         }
     }
 }

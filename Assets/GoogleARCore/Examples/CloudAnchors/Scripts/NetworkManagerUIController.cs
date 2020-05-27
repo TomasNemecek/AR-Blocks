@@ -160,7 +160,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                 m_Manager.matchInfo.nodeId, m_Manager.matchInfo.domain, _OnMatchDropped);
         }
 
-        public void OnSelectorClicked(GameObject btn)
+        public void OnSelectorClicked()
         {
             _ResetButtons();            
         }
