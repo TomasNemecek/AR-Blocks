@@ -148,7 +148,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         private SelectedObject m_SelectedObject;
 
-        private SelectedSize m_SelectedSize;
+        private SelectedSize m_SelectedSize = SelectedSize.Small;
         
         /// <summary>
         /// Enumerates modes the example application can be in.
@@ -734,57 +734,49 @@ namespace GoogleARCore.Examples.CloudAnchors
             SceneManager.LoadScene("CloudAnchors");
         }
 
+        
+        //Object selection
         public void OnCubeClicked()
         {
             m_SelectedObject = SelectedObject.Block;
-            NetworkUIController.OnSelectorClicked();
-            _ActiveteButton();
         }
 
         public void OnCubesClicked()
         {
             m_SelectedObject = SelectedObject.Blocks;    
-            _ActiveteButton();
-            NetworkUIController.OnSelectorClicked();
         }
 
         public void OnCubesVerticalClicked()
         {
             m_SelectedObject = SelectedObject.BlocksVertical;   
-            _ActiveteButton();
-            NetworkUIController.OnSelectorClicked();
-            
+                        
         }
         
         public void OnCubesCornerClicked()
         {
             m_SelectedObject = SelectedObject.BlocksCorner;  
-            _ActiveteButton();
-            NetworkUIController.OnSelectorClicked();
         }
         
+        
+        //Size Selection
         public void OnMiniClicked()
         {
             m_SelectedSize = SelectedSize.Mini;
-            _ActiveteButton();
         }
         
         public void OnSmallClicked()
         {
             m_SelectedSize = SelectedSize.Small;
-            _ActiveteButton();
         }
         
         public void OnMediumClicked()
         {
             m_SelectedSize = SelectedSize.Medium;
-            _ActiveteButton();
         }
         
         public void OnLargeClicked()
         {
             m_SelectedSize = SelectedSize.Large;
-            _ActiveteButton();
         }
 
         
