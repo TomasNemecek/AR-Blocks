@@ -41,10 +41,25 @@ namespace GoogleARCore.Examples.CloudAnchors
         public GameObject AnchorPrefab;
         
         public GameObject BlockPrefab;
-
         public GameObject BlocksPrefab;
         public GameObject BlocksVertPrefab;
         public GameObject BlocksCorner;
+        
+        
+        public GameObject MiniBlockPrefab;
+        public GameObject MiniBlocksPrefab;
+        public GameObject MiniBlocksVertPrefab;
+        public GameObject MiniBlocksCorner;
+        
+        public GameObject SmallBlockPrefab;
+        public GameObject SmallBlocksPrefab;
+        public GameObject SmallBlocksVertPrefab;
+        public GameObject SmallBlocksCorner;
+        
+        public GameObject LargeBlockPrefab;
+        public GameObject LargeBlocksPrefab;
+        public GameObject LargeBlocksVertPrefab;
+        public GameObject LargeBlocksCorner;
 
         /// <summary>
         /// The Unity OnStartLocalPlayer() method.
@@ -94,49 +109,128 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         }
 
+//        public void SpawnObject(SelectedObject selectedObject, SelectedSize selectedSize, Vector3 position, Quaternion rotation)
+//        {
+//            GameObject prefabToSpawn;
+//            switch (selectedObject)
+//            {
+//                case SelectedObject.Blocks:
+//                    prefabToSpawn = BlocksPrefab;
+//                    break;
+//                case SelectedObject.BlocksVertical:
+//                    prefabToSpawn = BlocksVertPrefab;
+//                    break;
+//                case SelectedObject.BlocksCorner:
+//                    prefabToSpawn = BlocksCorner;
+//                    break;
+//                default:
+//                    prefabToSpawn = BlockPrefab;
+//                    break;
+//            }
+//
+//            float scale;
+//            switch (selectedSize)
+//            {
+//                case SelectedSize.Mini:
+//                    scale = 0.25f;
+//                    break;
+//                case SelectedSize.Small:
+//                    scale = 0.5f;
+//                    break;
+//                case SelectedSize.Large:
+//                    scale = 1.5f;
+//                    break;
+//                default:
+//                    scale = 1f;
+//                    break;
+//            }
+//
+//            Vector3 tempScale = prefabToSpawn.transform.localScale;
+//
+//            tempScale.x = scale;
+//            tempScale.y = scale;
+//            tempScale.z = scale;
+//
+//            prefabToSpawn.transform.localScale = tempScale;
+//            
+//            CmdSpawnObject(prefabToSpawn, position, rotation);           
+//        }
+        
+        
+        //Quick hack to avoid chaning Prefab scale - as scale is not transferred over UNet
         public void SpawnObject(SelectedObject selectedObject, SelectedSize selectedSize, Vector3 position, Quaternion rotation)
         {
             GameObject prefabToSpawn;
-            switch (selectedObject)
+            if (selectedSize == SelectedSize.Mini)
             {
-                case SelectedObject.Blocks:
-                    prefabToSpawn = BlocksPrefab;
-                    break;
-                case SelectedObject.BlocksVertical:
-                    prefabToSpawn = BlocksVertPrefab;
-                    break;
-                case SelectedObject.BlocksCorner:
-                    prefabToSpawn = BlocksCorner;
-                    break;
-                default:
-                    prefabToSpawn = BlockPrefab;
-                    break;
-            }
-
-            float scale;
-            switch (selectedSize)
+                switch (selectedObject)
+                {
+                    case SelectedObject.Blocks:
+                        prefabToSpawn = MiniBlocksPrefab;
+                        break;
+                    case SelectedObject.BlocksVertical:
+                        prefabToSpawn = MiniBlocksVertPrefab;
+                        break;
+                    case SelectedObject.BlocksCorner:
+                        prefabToSpawn = MiniBlocksCorner;
+                        break;
+                    default:
+                        prefabToSpawn = MiniBlockPrefab;
+                        break;
+                }    
+            } else if (selectedSize == SelectedSize.Small)
             {
-                case SelectedSize.Mini:
-                    scale = 0.25f;
-                    break;
-                case SelectedSize.Small:
-                    scale = 0.5f;
-                    break;
-                case SelectedSize.Large:
-                    scale = 1.5f;
-                    break;
-                default:
-                    scale = 1f;
-                    break;
+                switch (selectedObject)
+                {
+                    case SelectedObject.Blocks:
+                        prefabToSpawn = SmallBlocksPrefab;
+                        break;
+                    case SelectedObject.BlocksVertical:
+                        prefabToSpawn = SmallBlocksVertPrefab;
+                        break;
+                    case SelectedObject.BlocksCorner:
+                        prefabToSpawn = SmallBlocksCorner;
+                        break;
+                    default:
+                        prefabToSpawn = SmallBlockPrefab;
+                        break;
+                }        
+            } else if (selectedSize == SelectedSize.Large)
+            {
+                switch (selectedObject)
+                {
+                    case SelectedObject.Blocks:
+                        prefabToSpawn = LargeBlocksPrefab;
+                        break;
+                    case SelectedObject.BlocksVertical:
+                        prefabToSpawn = LargeBlocksVertPrefab;
+                        break;
+                    case SelectedObject.BlocksCorner:
+                        prefabToSpawn = LargeBlocksCorner;
+                        break;
+                    default:
+                        prefabToSpawn = LargeBlockPrefab;
+                        break;
+                }        
             }
-
-            Vector3 tempScale = prefabToSpawn.transform.localScale;
-
-            tempScale.x = scale;
-            tempScale.y = scale;
-            tempScale.z = scale;
-
-            prefabToSpawn.transform.localScale = tempScale;
+            else
+            {
+                switch (selectedObject)
+                {
+                    case SelectedObject.Blocks:
+                        prefabToSpawn = BlocksPrefab;
+                        break;
+                    case SelectedObject.BlocksVertical:
+                        prefabToSpawn = BlocksVertPrefab;
+                        break;
+                    case SelectedObject.BlocksCorner:
+                        prefabToSpawn = BlocksCorner;
+                        break;
+                    default:
+                        prefabToSpawn = BlockPrefab;
+                        break;
+                }
+            }
             
             CmdSpawnObject(prefabToSpawn, position, rotation);           
         }

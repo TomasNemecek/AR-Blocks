@@ -88,3 +88,27 @@ MonoBehaviour:
     type: 3}
   BlocksCorner: {fileID: 1619573858750406774, guid: 098ade5a591b00e4cba0b9c6c02e43af,
     type: 3}
+  MiniBlockPrefab: {fileID: 8786034677356863673, guid: 26725085773764b4f953e41ad1873a94,
+    type: 3}
+  MiniBlocksPrefab: {fileID: 4950115067759889871, guid: 8805c4a5b74960847940cc0162fb2291,
+    type: 3}
+  MiniBlocksVertPrefab: {fileID: 4048565573910236214, guid: 9d24f3d9bc8e09d4280de8fee5f41688,
+    type: 3}
+  MiniBlocksCorner: {fileID: 1619573858750406774, guid: c19f195dfe2b74a489ada063d9e02aac,
+    type: 3}
+  SmallBlockPrefab: {fileID: 8786034677356863673, guid: 06a599a12f895204da7d51c928fa0ba4,
+    type: 3}
+  SmallBlocksPrefab: {fileID: 4950115067759889871, guid: 118bfb89718480943bb3a030aa0c2a24,
+    type: 3}
+  SmallBlocksVertPrefab: {fileID: 4048565573910236214, guid: 01ead95df5b009c459a7269cb1714ee4,
+    type: 3}
+  SmallBlocksCorner: {fileID: 1619573858750406774, guid: e498e674057f70b4a8f7b96650b32310,
+    type: 3}
+  LargeBlockPrefab: {fileID: 8786034677356863673, guid: adbdea3597c93d64fa7d1249baa2cc83,
+    type: 3}
+  LargeBlocksPrefab: {fileID: 4950115067759889871, guid: dffe2440617e7e94ba8c6c3e80e79dbb,
+    type: 3}
+  LargeBlocksVertPrefab: {fileID: 4048565573910236214, guid: 1e868cb4186331643aa35aece31f5a03,
+    type: 3}
+  LargeBlocksCorner: {fileID: 1619573858750406774, guid: eeaddc69c442570469c13d09664ca7b6,
+    type: 3}

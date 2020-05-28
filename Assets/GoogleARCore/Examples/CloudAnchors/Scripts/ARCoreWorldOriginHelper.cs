@@ -176,7 +176,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             if(detectectedBlock)
             {
                 //position does not have to be transformed, as we are going reflecting from an already anchor-relative position
-                Vector3 buildablePosition = CalcAdjustedNormalPosition(hitInfo) + hitInfo.transform.position;
+                Vector3 buildablePosition = CalcAdjustedNormalPosition(hitInfo, selectedSize) + hitInfo.transform.position;
                 
                 //TODO fix rotation
                 //Make rotation along be along the normal
@@ -221,50 +221,20 @@ namespace GoogleARCore.Examples.CloudAnchors
             return new Pose(position, rotation);
         }
         
-        
-//        private Vector3 CalcAdjustedNormalPosition(SelectedSize size, Vector3 normal)
-//        {
-//            switch (size)
-//            {
-//                case SelectedSize.Mini:
-//                    return normal / 8; 
-//                case SelectedSize.Small:
-//                    return normal / 4;
-//                case SelectedSize.Large:
-//                    return normal;
-//                default:
-//                    return normal / 2;
-//            }
-//        }
-        
-        private Vector3 CalcAdjustedNormalPosition(RaycastHit hitInfo)
+        private Vector3 CalcAdjustedNormalPosition(RaycastHit hitInfo, SelectedSize selectedSize)
         {
-            Vector3 hitObjectScale = hitInfo.collider.gameObject.transform.lossyScale;
-
-            _ShowAndroidToastMessage("Obj scale: " + hitObjectScale.x);
-            _ShowAndroidToastMessage("Normal: " + hitInfo.normal);
+            Vector3 normal = hitInfo.normal;
             
-            if (hitObjectScale.x > 0 && hitObjectScale.x < 0.25f)
+            switch (selectedSize)
             {
-                //Mini
-                            
-                _ShowAndroidToastMessage("mini");
-                return hitInfo.normal / 8;
-                
-            } else if (hitObjectScale.x >= 0.25f && hitObjectScale.x < 0.48f)
-            {    // Small
-                _ShowAndroidToastMessage("Small");
-                return hitInfo.normal / 4;
-                
-            } else if (hitObjectScale.x >= 0.5f && hitObjectScale.x < 0.74f)
-            {    //Medium
-                _ShowAndroidToastMessage("Medium");
-                return hitInfo.normal / 2;    
-            } else
-            {
-                //Large
-                _ShowAndroidToastMessage("Large");
-                return hitInfo.normal;
+                case SelectedSize.Mini:
+                    return normal / 8; 
+                case SelectedSize.Small:
+                    return normal / 4;
+                case SelectedSize.Large:
+                    return normal / 1.4f;
+                default:
+                    return normal / 2;
             }
         }
         

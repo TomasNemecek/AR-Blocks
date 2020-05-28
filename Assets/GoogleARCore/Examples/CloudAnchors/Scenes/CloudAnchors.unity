@@ -1599,7 +1599,7 @@ GameObject:
   - component: {fileID: 567222038}
   - component: {fileID: 567222037}
   m_Layer: 5
-  m_Name: Blocks Vertical
+  m_Name: Medium
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1669,7 +1669,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 265054090}
-        m_MethodName: OnCubesVerticalClicked
+        m_MethodName: OnMediumClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3188,7 +3188,7 @@ GameObject:
   - component: {fileID: 1006320996}
   - component: {fileID: 1006320995}
   m_Layer: 5
-  m_Name: Block
+  m_Name: Mini
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3258,7 +3258,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 265054090}
-        m_MethodName: OnCubeClicked
+        m_MethodName: OnMiniClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3392,6 +3392,18 @@ MonoBehaviour:
   - {fileID: 4950115067759889871, guid: 4284c978c07a48943b07d1a6228dd99e, type: 3}
   - {fileID: 4048565573910236214, guid: 9f2d97280e27b2b42a86216b332fdd01, type: 3}
   - {fileID: 1619573858750406774, guid: 098ade5a591b00e4cba0b9c6c02e43af, type: 3}
+  - {fileID: 8786034677356863673, guid: 26725085773764b4f953e41ad1873a94, type: 3}
+  - {fileID: 4950115067759889871, guid: 8805c4a5b74960847940cc0162fb2291, type: 3}
+  - {fileID: 4048565573910236214, guid: 9d24f3d9bc8e09d4280de8fee5f41688, type: 3}
+  - {fileID: 1619573858750406774, guid: c19f195dfe2b74a489ada063d9e02aac, type: 3}
+  - {fileID: 8786034677356863673, guid: 06a599a12f895204da7d51c928fa0ba4, type: 3}
+  - {fileID: 4950115067759889871, guid: 118bfb89718480943bb3a030aa0c2a24, type: 3}
+  - {fileID: 4048565573910236214, guid: 01ead95df5b009c459a7269cb1714ee4, type: 3}
+  - {fileID: 1619573858750406774, guid: e498e674057f70b4a8f7b96650b32310, type: 3}
+  - {fileID: 8786034677356863673, guid: adbdea3597c93d64fa7d1249baa2cc83, type: 3}
+  - {fileID: 4950115067759889871, guid: dffe2440617e7e94ba8c6c3e80e79dbb, type: 3}
+  - {fileID: 4048565573910236214, guid: 1e868cb4186331643aa35aece31f5a03, type: 3}
+  - {fileID: 1619573858750406774, guid: eeaddc69c442570469c13d09664ca7b6, type: 3}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -3808,7 +3820,7 @@ GameObject:
   - component: {fileID: 1139361274}
   - component: {fileID: 1139361273}
   m_Layer: 5
-  m_Name: Corner
+  m_Name: Large
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3878,7 +3890,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 265054090}
-        m_MethodName: OnCubesCornerClicked
+        m_MethodName: OnLargeClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4575,7 +4587,7 @@ GameObject:
   - component: {fileID: 1581081562}
   - component: {fileID: 1581081561}
   m_Layer: 5
-  m_Name: Blocks
+  m_Name: Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4645,7 +4657,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 265054090}
-        m_MethodName: OnCubesClicked
+        m_MethodName: OnSmallClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5427,8 +5439,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.18823531, g: 0.18823531, b: 0.37647063, a: 1}
+    m_PressedColor: {r: 0.18823531, g: 0.18823531, b: 0.37647063, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
