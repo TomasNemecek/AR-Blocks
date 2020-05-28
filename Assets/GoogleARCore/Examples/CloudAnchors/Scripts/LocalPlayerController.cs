@@ -160,6 +160,14 @@ namespace GoogleARCore.Examples.CloudAnchors
         //Quick hack to avoid chaning Prefab scale - as scale is not transferred over UNet
         public void SpawnObject(SelectedObject selectedObject, SelectedSize selectedSize, Vector3 position, Quaternion rotation)
         {
+            CmdSpawnObject(selectedObject, selectedSize, position, rotation);           
+        }
+        
+        [Command]
+        public void CmdSpawnObject(SelectedObject selectedObject, SelectedSize selectedSize, Vector3 position, Quaternion rotation)
+        {
+            _ShowAndroidToastMessage("In Command; obj: " +selectedObject + ", size:" + selectedSize);
+            
             GameObject prefabToSpawn;
             if (selectedSize == SelectedSize.Mini)
             {
@@ -231,19 +239,26 @@ namespace GoogleARCore.Examples.CloudAnchors
                         break;
                 }
             }
+                        
             
-            CmdSpawnObject(prefabToSpawn, position, rotation);           
-        }
-        
-        [Command]
-        public void CmdSpawnObject(GameObject obj, Vector3 position, Quaternion rotation)
-        {
-            // Instantiate Star model at the hit pose.
-            var blockObject = Instantiate(obj, position, rotation);
+            bool prefab = prefabToSpawn == null;
+            _ShowAndroidToastMessage("In Command; prefab = null: " + prefab + ", posi:" + position);
+           
+            var blockObject = Instantiate(prefabToSpawn, position, rotation);
+            
+            bool obj = blockObject == null;
+            _ShowAndroidToastMessage("In Command; block = null:  " + obj);
+
             // Spawn the object in all clients.
             NetworkServer.Spawn(blockObject);
 
         }
+
+//        [ClientRpc]
+//        void RpcSpawn(GameObject prefabToSpawn)
+//        {
+//            Spawn()
+//        }
 
         public void OnDestroyBlockForClient(GameObject gameobject)
         {
@@ -291,6 +306,25 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             GameObject blockAtVector = FindAt(position);
             Destroy(blockAtVector);
-        }       
+        }  
+        
+        private void _ShowAndroidToastMessage(string message)
+        {
+            AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject unityActivity =
+                unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+            if (unityActivity != null)
+            {
+                AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
+                unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+                {
+                    AndroidJavaObject toastObject =
+                        toastClass.CallStatic<AndroidJavaObject>(
+                            "makeText", unityActivity, message, 0);
+                    toastObject.Call("show");
+                }));
+            }
+        }
     }
 }
