@@ -303,7 +303,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             
             Ray raycast = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             
-            // We are in destroy mode 
+            // We are in destroy mode
             if (m_InDestroyMode)
             {
 
@@ -329,7 +329,6 @@ namespace GoogleARCore.Examples.CloudAnchors
                     TrackableHitFlags.PlaneWithinPolygon, out arcoreHitResult))
             {
                 //If origin is already placed, change the y value so that gameobject is not clipping through the plane
-                //TODO change y by scale when we have different objects and scaling. 
                 m_LastHitPose = arcoreHitResult.Pose;
                 if (IsOriginPlaced)
                 {
@@ -342,8 +341,8 @@ namespace GoogleARCore.Examples.CloudAnchors
             if (m_LastHitPose != null)
             {
                 // The first touch on the Hosting mode will instantiate the origin anchor. Any
-                // subsequent touch will instantiate a star, both in Hosting and Resolving modes.
-                if (_CanPlaceStars())
+                // subsequent touch will instantiate a block, both in Hosting and Resolving modes.
+                if (_CanPlaceBlocks())
                 {
 //                    _InstantiateBlock();
                     _InstantiateObject();
@@ -592,7 +591,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// Indicates whether a star can be placed.
         /// </summary>
         /// <returns><c>true</c>, if stars can be placed, <c>false</c> otherwise.</returns>
-        private bool _CanPlaceStars()
+        private bool _CanPlaceBlocks()
         {
             if (m_CurrentMode == ApplicationMode.Resolving)
             {

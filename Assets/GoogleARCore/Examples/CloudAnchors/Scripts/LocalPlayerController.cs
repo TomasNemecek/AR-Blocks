@@ -118,8 +118,6 @@ namespace GoogleARCore.Examples.CloudAnchors
         [Command]
         public void CmdSpawnObject(SelectedObject selectedObject, SelectedSize selectedSize, Vector3 position, Quaternion rotation)
         {
-            _ShowAndroidToastMessage("In Command; obj: " +selectedObject + ", size:" + selectedSize);
-            
             GameObject prefabToSpawn;
             if (selectedSize == SelectedSize.Mini)
             {
